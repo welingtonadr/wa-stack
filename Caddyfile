@@ -1,0 +1,4 @@
+webhook.vextrum.site {
+    reverse_proxy whatsapp_webhook:3000
+    encode gzip
+}
