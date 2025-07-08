@@ -8,7 +8,7 @@ services:
     volumes:
       - ./:/app                    # monta o código do repo dentro do container
     environment:
-      - VERIFY_TOKEN=TroquePorAlgoUnico
+      - VERIFY_TOKEN=MinhaSenhaWebhook123
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.webhook.rule=Host(`webhook.vextrum.site`)"
