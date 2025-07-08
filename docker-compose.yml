@@ -2,13 +2,9 @@ version: "3.9"
 
 services:
   whatsapp_webhook:
-    image: node:20-alpine          # vamos instalar dependências na inicialização
-    command: sh -c "npm install --omit=dev && node index.js"
-    working_dir: /app
-    volumes:
-      - ./:/app                    # monta o código do repo dentro do container
+    build: .                # ← agora compila a imagem a partir do Dockerfile
     environment:
-      - VERIFY_TOKEN=9f6c4e1c-bb1a-4f7a-a784-3b8b5d2d2a5e
+      - VERIFY_TOKEN=9f6c4e1c-bb1a-47fa-a784-3b8b5d2d2a5e
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.webhook.rule=Host(`webhook.vextrum.site`)"
