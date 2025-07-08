@@ -1,30 +1,17 @@
 version: "3.9"
 
 services:
-  caddy:
-    image: caddy:2-alpine
-    container_name: caddy
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy_data:/data
-      - caddy_config:/config
-    networks: [proxy]
-
   whatsapp_webhook:
-    build: .
-    container_name: whatsapp_webhook
-    restart: unless-stopped
+    image: node:20-alpine          # vamos instalar dependências na inicialização
+    command: sh -c "npm install --omit=dev && node index.js"
+    working_dir: /app
+    volumes:
+      - ./:/app                    # monta o código do repo dentro do container
     environment:
       - VERIFY_TOKEN=TroquePorAlgoUnico
-    networks: [proxy]
-
-networks:
-  proxy:
-
-volumes:
-  caddy_data:
-  caddy_config:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.webhook.rule=Host(`webhook.vextrum.site`)"
+      - "traefik.http.routers.webhook.entrypoints=websecure"
+      - "traefik.http.routers.webhook.tls=true"
+      - "traefik.http.services.webhook.loadbalancer.server.port=3000"
